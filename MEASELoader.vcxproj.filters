@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="ase\AseDLL.cpp">
+      <Filter>ase</Filter>
+    </ClCompile>
+    <ClCompile Include="ase\ASEDocument.cpp">
+      <Filter>ase</Filter>
+    </ClCompile>
+    <ClCompile Include="ase\GeometryFactory.cpp">
+      <Filter>ase</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ase\AseDLL.h">
+      <Filter>ase</Filter>
+    </ClInclude>
+    <ClInclude Include="ase\ASEDocument.h">
+      <Filter>ase</Filter>
+    </ClInclude>
+    <ClInclude Include="ase\GeometryFactory.h">
+      <Filter>ase</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="ase">
+      <UniqueIdentifier>{65d33258-d445-4af2-92e6-05969c8b77ab}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,24 @@
+# MESH_FACENORMAL.count == MESH_TFACE.count == MESH_FACE.count
+
+*MESH_NUMVERTEX <count>62
+*MESH_NUMTVERTEX <count>76
+*MESH_NUMFACES <count>120
+
+# MESH_VERTEX x MESH_NUMVERTEX.count
+# MESH_VERTEXNORMAL x MESH_NUMVERTEX.count
+# MESH_FACE x MESH_NUMFACES.count
+# MESH_TFACE x MESH_NUMFACES.count
+# MESH_FACENORMAL x MESH_NUMFACES.count
+
+*MESH_VERTEX    <index>	x	y	z
+*MESH_FACE   <index>:    A:   <MESH_VERTEX> B:   <MESH_VERTEX> C:   <MESH_VERTEX> AB:    1 BC:    1 CA:    1	 *MESH_SMOOTHING 2 	
+
+*MESH_TVERT <index>	u	v	0.0000
+
+*MESH_TFACE <index>	<MESH_TVERT>	<MESH_TVERT>	<MESH_TVERT>
+
+# Face Normals, and then individual face vertices normals
+*MESH_FACENORMAL <index>	x	y	z
+	*MESH_VERTEXNORMAL <index>	x	y	z
+	*MESH_VERTEXNORMAL <index>	x	y	z
+	*MESH_VERTEXNORMAL <index>	x	y	z
