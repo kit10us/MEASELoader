@@ -3,7 +3,7 @@
 #pragma once
 
 #include <me/render/Mesh.h>
-#include <rm/ResourceManagerSimple.h>
+#include <rm/ResourceManager.h>
 #include <me/game/Game.h>
 
 namespace ase
