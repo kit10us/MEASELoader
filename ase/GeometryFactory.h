@@ -11,6 +11,8 @@ namespace ase
 	class GeometryFactory : public rm::ISourceFactory< me::render::Geometry >
 	{
 	public:
+		typedef std::shared_ptr< rm::ISourceFactory< me::render::Geometry> > ptr;
+
 		GeometryFactory( me::game::Game * gameInstance );
 
 		void SetVertexShader( me::render::IVertexShader::ptr vertexShader );

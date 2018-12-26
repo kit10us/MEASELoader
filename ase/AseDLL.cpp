@@ -51,7 +51,7 @@ __declspec(dllexport) bool MELoader( me::game::IGame * gameBase, const qxml::Ele
 	factory->SetVertexShader( vs );
 	factory->SetPixelShader( ps );
 
-	gameInstance->GetManager< Geometry >()->AddFactory( "ase", GeometryFactoryPtr( factory ) );
+	gameInstance->GetManager< Geometry >()->AddFactory( "ase", GeometryFactory::ptr( factory ) );
 
 
 	return true;
