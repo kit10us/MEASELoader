@@ -205,7 +205,7 @@ Geometry::ptr GeometryFactory::Produce( unify::Path source, void * data )
 
 					std::shared_ptr< unsigned char > vertices( new unsigned char[vd->GetSizeInBytes( 0 ) * listPTP.size()] );
 
-					unify::DataLock lock( vertices.get(), vd->GetSizeInBytes( 0 ), listPTP.size(), false, 0 );
+					unify::DataLock lock( vertices.get(), vd->GetSizeInBytes( 0 ), listPTP.size(), unify::DataLock::ReadWrite, 0 );
 
 					std::vector< Index32 > indices( (unsigned int)listPTP.size() * 3 );
 
