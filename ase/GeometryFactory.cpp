@@ -238,9 +238,10 @@ Geometry::ptr GeometryFactory::Produce( unify::Path source, void * data )
 						indices[index * 3 + 2] = (Index32)index * 3 + 2;
 					}
 					
+					set.SetEffect( effect );
 					set.AddVertexBuffer( { vd, { { listPTP.size(), vertices.get() } }, BufferUsage::Default, bbox } );
 					set.AddIndexBuffer( { { { listPTP.size() * 3, &indices[0] } }, BufferUsage::Default } );
-					set.AddMethod( RenderMethod::CreateTriangleListIndexed( mesh_numfaces * 3, (unsigned int)listPTP.size() * 3, 0, 0, effect ) );
+					set.AddMethod( RenderMethod::CreateTriangleListIndexed( mesh_numfaces * 3, (unsigned int)listPTP.size() * 3, 0, 0 ) );
 				}
 			}
 		}
