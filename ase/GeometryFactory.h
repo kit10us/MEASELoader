@@ -19,6 +19,8 @@ namespace ase
 		void SetPixelShader( me::render::IPixelShader::ptr pixelShader );
 
 		me::render::Geometry::ptr Produce( unify::Path source, void * data ) override;
+		me::render::Geometry::ptr Produce( void * data ) override;
+		me::render::Geometry::ptr Produce( unify::Parameters parameters ) override;
 
 	private:
 	me::game::Game *m_game;

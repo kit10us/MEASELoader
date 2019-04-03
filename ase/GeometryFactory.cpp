@@ -250,3 +250,13 @@ Geometry::ptr GeometryFactory::Produce( unify::Path source, void * data )
 	mesh->GetPrimitiveList().ComputeBounds( mesh->GetBBox() );
 	return Geometry::ptr( mesh );
 }
+
+Geometry::ptr GeometryFactory::Produce( void * data )
+{
+	throw me::exception::FailedToCreate( "Attempted to create geometry from raw data." );
+}
+
+Geometry::ptr GeometryFactory::Produce( unify::Parameters parameters )
+{
+	throw me::exception::FailedToCreate( "Attempted to create geometry from parameters." );
+}
