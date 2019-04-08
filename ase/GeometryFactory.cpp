@@ -28,7 +28,7 @@ void GeometryFactory::SetPixelShader( IPixelShader::ptr pixelShader )
 	m_pixelShader = pixelShader;
 }
 
-Geometry::ptr GeometryFactory::Produce( unify::Path source, void * data )
+Geometry::ptr GeometryFactory::Produce( unify::Path source, unify::Parameters parameters )
 {
 	game::Game & gameInstance = *m_game;
 
@@ -249,11 +249,6 @@ Geometry::ptr GeometryFactory::Produce( unify::Path source, void * data )
 
 	mesh->GetPrimitiveList().ComputeBounds( mesh->GetBBox() );
 	return Geometry::ptr( mesh );
-}
-
-Geometry::ptr GeometryFactory::Produce( void * data )
-{
-	throw me::exception::FailedToCreate( "Attempted to create geometry from raw data." );
 }
 
 Geometry::ptr GeometryFactory::Produce( unify::Parameters parameters )
