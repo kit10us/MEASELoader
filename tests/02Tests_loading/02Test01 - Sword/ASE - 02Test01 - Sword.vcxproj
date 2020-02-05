@@ -21,9 +21,8 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5E8E6D0C-A3C4-4DC3-AFBD-FC384793EA8D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>My02Test01Sword</RootNamespace>
+    <RootNamespace>MyASE02Test01Sword</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>ASE - 02Test01 - Sword</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -76,6 +75,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\..\..\output\$(DefaultPlatformToolset)_$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>..\..\..\..\intermediate\$(DefaultPlatformToolset)_$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
