@@ -8,7 +8,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>.;..\..\..\..\MEWinMain;..\..\..\..\ws\MercuryEngine;..\..\..\..\unify;..\..\..\..\QXML;..\..\..\..\QJson;..\..\..\..\ResourceManager;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\..\..\..\MEWinMain;..\..\..\..\MercuryEngine;..\..\..\..\unify;..\..\..\..\QXML;..\..\..\..\QJson;..\..\..\..\ResourceManager;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\..\..\..\lib\$(DefaultPlatformToolset)_$(Configuration);%AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

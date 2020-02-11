@@ -3,3 +3,5 @@
 *.tlog
 /intermediate
 /output
+/tests/intermediate
+tests/02Tests_loading/
