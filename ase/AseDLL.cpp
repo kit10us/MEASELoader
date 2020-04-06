@@ -28,7 +28,7 @@ __declspec(dllexport) bool MELoader( me::game::IGame * gameBase, const qxml::Ele
 	const auto * texturePS = element->FindFirstElement( "textureps" );
 	if ( ! texturePS )
 	{
-		debug->ReportError( me::ErrorLevel::Failure, "ASELoader", "Element \"textureps\" in \"" + element->GetDocument()->GetPath().ToString() + "\"." ); 
+		debug->ReportError( debug::ErrorLevel::Failure, "ASELoader", "Element \"textureps\" in \"" + element->GetDocument()->GetPath().ToString() + "\"." ); 
 	}
 	
 	debug->Assert( texturePS != nullptr );
@@ -40,7 +40,7 @@ __declspec(dllexport) bool MELoader( me::game::IGame * gameBase, const qxml::Ele
 	const auto * textureVS = element->FindFirstElement( "texturevs" );
 	if (!texturePS)
 	{
-		debug->ReportError( me::ErrorLevel::Failure, "ASELoader", "Element \"texturevs\" in \"" + element->GetDocument()->GetPath().ToString() + "\"." );
+		debug->ReportError( debug::ErrorLevel::Failure, "ASELoader", "Element \"texturevs\" in \"" + element->GetDocument()->GetPath().ToString() + "\"." );
 	}
 
 	std::string textureVSName = textureVS->GetAttribute< std::string >( "name" );
