@@ -52,8 +52,8 @@
   <ImportGroup Label="Shared">
   </ImportGroup>
   <PropertyGroup>
-    <IntDir>$(SolutionDir)intermediate\$(DefaultPlatformToolset)_$(Configuration)\$(ProjectName)</IntDir>
-    <OutDir>$(SolutionDir)extensions\$(Configuration)</OutDir>
+    <IntDir>$(SolutionDir)intermediate\$(DefaultPlatformToolset)_$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)extensions\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

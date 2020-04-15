@@ -6,6 +6,7 @@
 #include <memory.h>
 #include <me/render/IRenderer.h>
 #include <me/game/Game.h>
+#include <me/debug/ErrorLevel.h>
 
 using namespace ase;
 using namespace me;
@@ -24,11 +25,12 @@ __declspec(dllexport) bool MELoader( me::game::IGame * gameBase, const qxml::Ele
 
 	auto gameInstance = dynamic_cast< game::Game * >( gameBase );
 	auto debug = gameInstance->Debug();
+	auto block{ debug->GetLogger()->CreateBlock( "MELoader \"MEASELoader\"" ) };
 
 	const auto * texturePS = element->FindFirstElement( "textureps" );
 	if ( ! texturePS )
 	{
-		debug->ReportError( debug::ErrorLevel::Failure, "ASELoader", "Element \"textureps\" in \"" + element->GetDocument()->GetPath().ToString() + "\"." ); 
+		debug->ReportError( debug::ErrorLevel::Failure, "Element \"textureps\" in \"" + element->GetDocument()->GetPath().ToString() + "\"." ); 
 	}
 	
 	debug->Assert( texturePS != nullptr );
@@ -40,7 +42,7 @@ __declspec(dllexport) bool MELoader( me::game::IGame * gameBase, const qxml::Ele
 	const auto * textureVS = element->FindFirstElement( "texturevs" );
 	if (!texturePS)
 	{
-		debug->ReportError( debug::ErrorLevel::Failure, "ASELoader", "Element \"texturevs\" in \"" + element->GetDocument()->GetPath().ToString() + "\"." );
+		debug->ReportError( debug::ErrorLevel::Failure, "Element \"texturevs\" in \"" + element->GetDocument()->GetPath().ToString() + "\"." );
 	}
 
 	std::string textureVSName = textureVS->GetAttribute< std::string >( "name" );
