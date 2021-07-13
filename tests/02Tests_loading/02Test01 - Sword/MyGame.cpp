@@ -4,6 +4,7 @@
 #include <MEWinMain.h>
 #include <me/game/Game.h>
 #include <MainScene.h>
+#include <unify/Path.h>
 
 using namespace me;
 
