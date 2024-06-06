@@ -1,7 +1,4 @@
-
 *.log
 *.tlog
-/intermediate
-/output
-/tests/intermediate
-tests/02Tests_loading/
+*.log
+*.vcxproj.user
