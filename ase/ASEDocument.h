@@ -10,6 +10,6 @@ namespace ase
 	class Document : public qxml::Document
 	{
 	public:
-		unify::Result Load( unify::Path filePath );
+		unify::Result<> Load(unify::Path filePath);
 	};
 }

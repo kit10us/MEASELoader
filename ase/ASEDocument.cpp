@@ -10,16 +10,14 @@ using namespace ase;
 
 void ProcessASEElement( qxml::Element * pElement, std::string text );
 
-unify::Result Document::Load( unify::Path filePath )
+unify::Result<> Document::Load( unify::Path filePath )
 {
-	using Result = unify::Result;
-
 	// Destroy existing document
 	Destroy();
 
 	if( ! filePath.Exists() )
 	{
-		return Result( false, filePath.ToString() + ": XML File not found!" );
+		return unify::Failure(filePath.ToString() + ": XML File not found!" );
 	}
 
 	unify::FileStream stream;
@@ -87,7 +85,7 @@ unify::Result Document::Load( unify::Path filePath )
 		}
 		line++;
 	}
-	return Result();
+	return {};
 }
 
 void ProcessASEElement( qxml::Element * pElement, std::string text )

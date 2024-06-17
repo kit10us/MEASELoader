@@ -84,7 +84,7 @@ Geometry::ptr GeometryFactory::Produce( unify::Path source, unify::Parameters pa
 				{
 					qxml::Element * bitmapElement = mapDiffuseElement->GetElement( "BITMAP" );
 					unify::Path texturePath( source.DirectoryOnly(), unify::Path( bitmapElement->GetText() ) );
-					ITexture::ptr texture = textureManager->Add( bitmapElement->GetText(), texturePath );
+					ITexture::ptr texture = textureManager->Add( bitmapElement->GetText(), texturePath )();
 					effect->SetTexture( 0, texture );
 				}
 			}

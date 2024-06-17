@@ -37,7 +37,7 @@ __declspec(dllexport) bool MELoader( me::game::IGame * gameBase, const qxml::Ele
 
 	std::string texturePSName = texturePS->GetAttribute< std::string >( "name" );
 	unify::Path texturePSPath( texturePS->GetAttribute< std::string >( "source" ) );
-	IPixelShader::ptr ps = gameInstance->GetManager< IPixelShader >()->Add( texturePSName, texturePSPath );
+	IPixelShader::ptr ps = gameInstance->GetManager< IPixelShader >()->Add( texturePSName, texturePSPath )();
 	
 	const auto * textureVS = element->FindFirstElement( "texturevs" );
 	if (!texturePS)
@@ -47,7 +47,7 @@ __declspec(dllexport) bool MELoader( me::game::IGame * gameBase, const qxml::Ele
 
 	std::string textureVSName = textureVS->GetAttribute< std::string >( "name" );
 	unify::Path textureVSPath( textureVS->GetAttribute< std::string >( "source" ) );
-	IVertexShader::ptr vs = gameInstance->GetManager< IVertexShader >()->Add( textureVSName, textureVSPath );
+	IVertexShader::ptr vs = gameInstance->GetManager< IVertexShader >()->Add( textureVSName, textureVSPath )();
 
 	// Setup ASE factories.
 	GeometryFactory * factory = new GeometryFactory( gameInstance );
