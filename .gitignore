@@ -2,3 +2,5 @@
 *.tlog
 *.log
 *.vcxproj.user
+default.csv
+tests/Data/DX11/log_DebugWindows_DX11.csv
