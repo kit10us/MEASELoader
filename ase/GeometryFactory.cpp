@@ -7,7 +7,8 @@
 #include <me/render/VertexUtil.h>
 #include <unify/String.h>
 #include <unify/FrameSet.h>
-#include <unify/ColorUnit.h>
+#include <unify/Colors.h>
+#include <unify/Cast.h>
 
 using namespace ase;
 using namespace me;
@@ -97,7 +98,7 @@ Geometry::ptr GeometryFactory::Produce( unify::Path source, unify::Parameters pa
 			assert( materialRef ); // TODO: Presumably this could be null, which likely means the default material - this is not support yet.
 
 			unsigned int effectIndex = 0;
-			effectIndex = unify::Cast< unsigned int >( materialRef->GetText() );
+			effectIndex = *unify::Tostring< unsigned int >( materialRef->GetText() );
 			Effect::ptr effect = materialList[effectIndex];
 
 			for( auto child : node.Children() )
@@ -121,12 +122,12 @@ Geometry::ptr GeometryFactory::Produce( unify::Path source, unify::Parameters pa
 					VertexElement specularE = CommonVertexElement::Specular( stream );
 					VertexElement texE = CommonVertexElement::TexCoords( stream );
 					
-					unsigned int mesh_numfaces = unify::Cast< unsigned int >( mesh.GetElement( "MESH_NUMFACES" )->GetText() );
+					unsigned int mesh_numfaces = *unify::FromString< unsigned int >( mesh.GetElement( "MESH_NUMFACES" )->GetText() );
 					unsigned int uNumPVertices; // Positional "MESH_VERTEX"
 					unsigned int uNumTVertices; // Texture "MESH_TVERT"
 
-					uNumPVertices = unify::Cast< unsigned int >( mesh.GetElement( "MESH_NUMVERTEX" )->GetText() );
-					uNumTVertices = unify::Cast< unsigned int >( mesh.GetElement( "MESH_NUMTVERTEX" )->GetText() );
+					uNumPVertices = *unify::FromString< unsigned int >( mesh.GetElement( "MESH_NUMVERTEX" )->GetText() );
+					uNumTVertices = *unify::FromString< unsigned int >( mesh.GetElement( "MESH_NUMTVERTEX" )->GetText() );
 
 					struct Face
 					{	
@@ -205,7 +206,7 @@ Geometry::ptr GeometryFactory::Produce( unify::Path source, unify::Parameters pa
 
 					std::shared_ptr< unsigned char > vertices( new unsigned char[vd->GetSizeInBytes( 0 ) * listPTP.size()] );
 
-					unify::DataLock lock( vertices.get(), (unsigned int)vd->GetSizeInBytes( 0 ), (unsigned int)listPTP.size(), unify::DataLockAccess::ReadWrite, 0 );
+					util::DataLock lock( vertices.get(), (unsigned int)vd->GetSizeInBytes( 0 ), (unsigned int)listPTP.size(), util::DataLockAccess::ReadWrite, 0 );
 
 					std::vector< Index32 > indices( (unsigned int)listPTP.size() * 3 );
 

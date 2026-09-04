@@ -61,7 +61,7 @@ unify::Result<> Document::Load( unify::Path filePath )
 			--depth;
 		}
 
-		sData = unify::string::TrimLeft( strData, '\t' );
+		sData = unify::String::TrimLeft( strData, '\t' );
 
 		// Check that this is a valid element...
 		if( sData[ 0 ] != '*' ) 
@@ -69,14 +69,14 @@ unify::Result<> Document::Load( unify::Path filePath )
 			continue;
 		}
 
-		std::string name = unify::string::StringMinusLeft( unify::string::ListPart( sData, {' ', '\t' }, 0 ), 1 );
+		std::string name = unify::String::StringMinusLeft( unify::String::ListPart( sData, {' ', '\t' }, 0 ), 1 );
 		qxml::Element * element = new qxml::Element( name, qxml::Element::NodeType::Element, nullptr, line );
 		previous = element;
 		AddElement( element );
 		parent->TakeChild( element );
 
 		// Ignore a curly brace'd element...
-		if( unify::string::RightString( sData, 1 ) != "{" )
+		if( unify::String::RightString( sData, 1 ) != "{" )
 		{
 			std::string text = std::regex_replace( sData, std::regex{ "^[*]" + name + "(\t|[ ])*" }, "" );
 			
@@ -91,72 +91,72 @@ unify::Result<> Document::Load( unify::Path filePath )
 void ProcessASEElement( qxml::Element * pElement, std::string text )
 {
 	std::string tagName = pElement->GetName();
-	if( unify::string::StringIs( tagName, "SCENE_AMBIENT_STATIC" ) )
+	if( unify::String::StringIs( tagName, "SCENE_AMBIENT_STATIC" ) )
 	{
-		text = unify::string::CleanWhitespace( text );
-		pElement->AddAttribute( "r", unify::string::ListPart( text, {' ', '\t'}, 0 ) );
-		pElement->AddAttribute( "g", unify::string::ListPart( text, {' ', '\t'}, 1 ) );
-		pElement->AddAttribute( "b", unify::string::ListPart( text, {' ', '\t'}, 2 ) );
+		text = unify::String::CleanWhitespace( text );
+		pElement->AddAttribute( "r", unify::String::ListPart( text, {' ', '\t'}, 0 ) );
+		pElement->AddAttribute( "g", unify::String::ListPart( text, {' ', '\t'}, 1 ) );
+		pElement->AddAttribute( "b", unify::String::ListPart( text, {' ', '\t'}, 2 ) );
 	}
-	else if( unify::string::StringIs( tagName, "INHERIT_POS" ) )
+	else if( unify::String::StringIs( tagName, "INHERIT_POS" ) )
 	{
-		text = unify::string::CleanWhitespace( text );
-		pElement->AddAttribute( "x", unify::string::ListPart( text, {' ', '\t'}, 0 ) );
-		pElement->AddAttribute( "y", unify::string::ListPart( text, {' ', '\t'}, 1 ) );
-		pElement->AddAttribute( "z", unify::string::ListPart( text, {' ', '\t'}, 2 ) );
+		text = unify::String::CleanWhitespace( text );
+		pElement->AddAttribute( "x", unify::String::ListPart( text, {' ', '\t'}, 0 ) );
+		pElement->AddAttribute( "y", unify::String::ListPart( text, {' ', '\t'}, 1 ) );
+		pElement->AddAttribute( "z", unify::String::ListPart( text, {' ', '\t'}, 2 ) );
 	}
-	else if( unify::string::StringIs( tagName, "MESH_VERTEX" ) )
+	else if( unify::String::StringIs( tagName, "MESH_VERTEX" ) )
 	{
-		text = unify::string::CleanWhitespace( text );
-		pElement->AddAttribute( "index", unify::string::ListPart( text, {' ', '\t'}, 0 ) );
-		pElement->AddAttribute( "x", unify::string::ListPart( text, {' ', '\t'}, 1 ) );
-		pElement->AddAttribute( "y", unify::string::ListPart( text, {' ', '\t'}, 2 ) );
-		pElement->AddAttribute( "z", unify::string::ListPart( text, {' ', '\t'}, 3 ) );
+		text = unify::String::CleanWhitespace( text );
+		pElement->AddAttribute( "index", unify::String::ListPart( text, {' ', '\t'}, 0 ) );
+		pElement->AddAttribute( "x", unify::String::ListPart( text, {' ', '\t'}, 1 ) );
+		pElement->AddAttribute( "y", unify::String::ListPart( text, {' ', '\t'}, 2 ) );
+		pElement->AddAttribute( "z", unify::String::ListPart( text, {' ', '\t'}, 3 ) );
 	}
-	else if( unify::string::StringIs( tagName, "MESH_VERTEXNORMAL" ) )
+	else if( unify::String::StringIs( tagName, "MESH_VERTEXNORMAL" ) )
 	{
-		text = unify::string::CleanWhitespace( text );
-		pElement->AddAttribute( "index", unify::string::ListPart( text, {' ', '\t'}, 0 ) );
-		pElement->AddAttribute( "x", unify::string::ListPart( text, {' ', '\t'}, 1 ) );
-		pElement->AddAttribute( "y", unify::string::ListPart( text, {' ', '\t'}, 2 ) );
-		pElement->AddAttribute( "z", unify::string::ListPart( text, {' ', '\t'}, 3 ) );
+		text = unify::String::CleanWhitespace( text );
+		pElement->AddAttribute( "index", unify::String::ListPart( text, {' ', '\t'}, 0 ) );
+		pElement->AddAttribute( "x", unify::String::ListPart( text, {' ', '\t'}, 1 ) );
+		pElement->AddAttribute( "y", unify::String::ListPart( text, {' ', '\t'}, 2 ) );
+		pElement->AddAttribute( "z", unify::String::ListPart( text, {' ', '\t'}, 3 ) );
 	}
-	else if( unify::string::StringIs( tagName, "MESH_FACENORMAL" ) )
+	else if( unify::String::StringIs( tagName, "MESH_FACENORMAL" ) )
 	{
-		text = unify::string::CleanWhitespace( text );
-		pElement->AddAttribute( "index", unify::string::ListPart( text, {' ', '\t'}, 0 ) );
-		pElement->AddAttribute( "x", unify::string::ListPart( text, {' ', '\t'}, 1 ) );
-		pElement->AddAttribute( "y", unify::string::ListPart( text, {' ', '\t'}, 2 ) );
-		pElement->AddAttribute( "z", unify::string::ListPart( text, {' ', '\t'}, 3 ) );
+		text = unify::String::CleanWhitespace( text );
+		pElement->AddAttribute( "index", unify::String::ListPart( text, {' ', '\t'}, 0 ) );
+		pElement->AddAttribute( "x", unify::String::ListPart( text, {' ', '\t'}, 1 ) );
+		pElement->AddAttribute( "y", unify::String::ListPart( text, {' ', '\t'}, 2 ) );
+		pElement->AddAttribute( "z", unify::String::ListPart( text, {' ', '\t'}, 3 ) );
 	}
-	else if( unify::string::StringIs( tagName, "MESH_TVERT" ) )
+	else if( unify::String::StringIs( tagName, "MESH_TVERT" ) )
 	{
-		text = unify::string::CleanWhitespace( text );
-		pElement->AddAttribute( "index", unify::string::ListPart( text, {' ', '\t'}, 0 ) );
-		pElement->AddAttribute( "u", unify::string::ListPart( text, {' ', '\t'}, 1 ) );
-		pElement->AddAttribute( "v", unify::string::ListPart( text, {' ', '\t'}, 2 ) );
-		pElement->AddAttribute( "w", unify::string::ListPart( text, {' ', '\t'}, 3 ) );
+		text = unify::String::CleanWhitespace( text );
+		pElement->AddAttribute( "index", unify::String::ListPart( text, {' ', '\t'}, 0 ) );
+		pElement->AddAttribute( "u", unify::String::ListPart( text, {' ', '\t'}, 1 ) );
+		pElement->AddAttribute( "v", unify::String::ListPart( text, {' ', '\t'}, 2 ) );
+		pElement->AddAttribute( "w", unify::String::ListPart( text, {' ', '\t'}, 3 ) );
 	}
-	else if( unify::string::StringIs( tagName, "MESH_TFACE" ) )
+	else if( unify::String::StringIs( tagName, "MESH_TFACE" ) )
 	{
-		text = unify::string::CleanWhitespace( text );
-		pElement->AddAttribute( "index", unify::string::ListPart( text, {' ', '\t'}, 0 ) );
-		pElement->AddAttribute( "A", unify::string::ListPart( text, {' ', '\t'}, 1 ) );
-		pElement->AddAttribute( "B", unify::string::ListPart( text, {' ', '\t'}, 2 ) );
-		pElement->AddAttribute( "C", unify::string::ListPart( text, {' ', '\t'}, 3 ) );
+		text = unify::String::CleanWhitespace( text );
+		pElement->AddAttribute( "index", unify::String::ListPart( text, {' ', '\t'}, 0 ) );
+		pElement->AddAttribute( "A", unify::String::ListPart( text, {' ', '\t'}, 1 ) );
+		pElement->AddAttribute( "B", unify::String::ListPart( text, {' ', '\t'}, 2 ) );
+		pElement->AddAttribute( "C", unify::String::ListPart( text, {' ', '\t'}, 3 ) );
 	}
-	else if( unify::string::StringIs( tagName, "MESH_FACE" ) )
+	else if( unify::String::StringIs( tagName, "MESH_FACE" ) )
 	{
-		text = unify::string::CleanWhitespace( text );
-		std::string sIndex = unify::string::StringMinusRight( unify::string::ListPart( text, {' ', '\t'}, 0 ), 1 );
-		std::string sA = unify::string::ListPart( text, {' ', '\t'}, 2 );
-		std::string sB = unify::string::ListPart( text, {' ', '\t'}, 4 );
-		std::string sC = unify::string::ListPart( text, {' ', '\t'}, 6 );
-		std::string sAB = unify::string::ListPart( text, {' ', '\t'}, 8 );
-		std::string sBC = unify::string::ListPart( text, {' ', '\t'}, 10 );
-		std::string sCA = unify::string::ListPart( text, {' ', '\t'}, 12 );
-		std::string sMS = unify::string::ListPart( text, {' ', '\t'}, 14 );
-		std::string sMM = unify::string::ListPart( text, {' ', '\t'}, 16 );
+		text = unify::String::CleanWhitespace( text );
+		std::string sIndex = unify::String::StringMinusRight( unify::String::ListPart( text, {' ', '\t'}, 0 ), 1 );
+		std::string sA = unify::String::ListPart( text, {' ', '\t'}, 2 );
+		std::string sB = unify::String::ListPart( text, {' ', '\t'}, 4 );
+		std::string sC = unify::String::ListPart( text, {' ', '\t'}, 6 );
+		std::string sAB = unify::String::ListPart( text, {' ', '\t'}, 8 );
+		std::string sBC = unify::String::ListPart( text, {' ', '\t'}, 10 );
+		std::string sCA = unify::String::ListPart( text, {' ', '\t'}, 12 );
+		std::string sMS = unify::String::ListPart( text, {' ', '\t'}, 14 );
+		std::string sMM = unify::String::ListPart( text, {' ', '\t'}, 16 );
 		pElement->AddAttribute( "index", sIndex );
 		pElement->AddAttribute( "A", sA );
 		pElement->AddAttribute( "B", sB );
@@ -167,30 +167,30 @@ void ProcessASEElement( qxml::Element * pElement, std::string text )
 		pElement->AddAttribute( "MESH_SMOOTHING", sMS );
 		pElement->AddAttribute( "MESH_MTLID", sMM );
 	}
-	else if( unify::string::StringIs( tagName, "MATERIAL_AMBIENT" ) )
+	else if( unify::String::StringIs( tagName, "MATERIAL_AMBIENT" ) )
 	{
-		text = unify::string::CleanWhitespace( text );
-		pElement->AddAttribute( "R", unify::string::ListPart( text, {' ', '\t'}, 0 ) );
-		pElement->AddAttribute( "G", unify::string::ListPart( text, {' ', '\t'}, 1 ) );
-		pElement->AddAttribute( "B", unify::string::ListPart( text, {' ', '\t'}, 2 ) );
+		text = unify::String::CleanWhitespace( text );
+		pElement->AddAttribute( "R", unify::String::ListPart( text, {' ', '\t'}, 0 ) );
+		pElement->AddAttribute( "G", unify::String::ListPart( text, {' ', '\t'}, 1 ) );
+		pElement->AddAttribute( "B", unify::String::ListPart( text, {' ', '\t'}, 2 ) );
 	}
-	else if( unify::string::StringIs( tagName, "MATERIAL_DIFFUSE" ) )
+	else if( unify::String::StringIs( tagName, "MATERIAL_DIFFUSE" ) )
 	{
-		text = unify::string::CleanWhitespace( text );
-		pElement->AddAttribute( "R", unify::string::ListPart( text, {' ', '\t'}, 0 ) );
-		pElement->AddAttribute( "G", unify::string::ListPart( text, {' ', '\t'}, 1 ) );
-		pElement->AddAttribute( "B", unify::string::ListPart( text, {' ', '\t'}, 2 ) );
+		text = unify::String::CleanWhitespace( text );
+		pElement->AddAttribute( "R", unify::String::ListPart( text, {' ', '\t'}, 0 ) );
+		pElement->AddAttribute( "G", unify::String::ListPart( text, {' ', '\t'}, 1 ) );
+		pElement->AddAttribute( "B", unify::String::ListPart( text, {' ', '\t'}, 2 ) );
 	}
-	else if( unify::string::StringIs( tagName, "MATERIAL_SPECULAR" ) )
+	else if( unify::String::StringIs( tagName, "MATERIAL_SPECULAR" ) )
 	{
-		text = unify::string::CleanWhitespace( text );
-		pElement->AddAttribute( "R", unify::string::ListPart( text, {' ', '\t'}, 0 ) );
-		pElement->AddAttribute( "G", unify::string::ListPart( text, {' ', '\t'}, 1 ) );
-		pElement->AddAttribute( "B", unify::string::ListPart( text, {' ', '\t'}, 2 ) );
+		text = unify::String::CleanWhitespace( text );
+		pElement->AddAttribute( "R", unify::String::ListPart( text, {' ', '\t'}, 0 ) );
+		pElement->AddAttribute( "G", unify::String::ListPart( text, {' ', '\t'}, 1 ) );
+		pElement->AddAttribute( "B", unify::String::ListPart( text, {' ', '\t'}, 2 ) );
 	}
-	else if( unify::string::StringIs( tagName, "MATERIAL_NAME" ) || unify::string::StringIs( tagName, "MATERIAL_CLASS" ) || unify::string::StringIs( tagName, "MAP_NAME" ) || unify::string::StringIs( tagName, "BITMAP" ))
+	else if( unify::String::StringIs( tagName, "MATERIAL_NAME" ) || unify::String::StringIs( tagName, "MATERIAL_CLASS" ) || unify::String::StringIs( tagName, "MAP_NAME" ) || unify::String::StringIs( tagName, "BITMAP" ))
 	{
-		pElement->AddText( unify::string::Trim( text, '\"' ) );
+		pElement->AddText( unify::String::Trim( text, '\"' ) );
 	}
 	else
 	{
