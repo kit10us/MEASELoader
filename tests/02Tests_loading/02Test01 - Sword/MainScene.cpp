@@ -59,6 +59,6 @@ void MainScene::OnUpdate( const UpdateParams & params )
 	// Use of camera controls to simplify camera movement...
 	Object * camera = FindObject( "camera" );
 	
-	camera->GetFrame().Orbit( { 0, 0, 0 }, { 1, 0 }, unify::AngleInRadians( params.GetDelta().GetSeconds() ) );
+	camera->GetFrame().Orbit( { 0, 0, 0 }, { 1, 0 }, unify::AngleInRadians( params.GetDelta().AsSeconds() ) );
 	camera->GetFrame().LookAt( { 0, 0, 0 }, { 0, 1, 0 } );
 }

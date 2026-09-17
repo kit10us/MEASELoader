@@ -31,13 +31,18 @@ __declspec(dllexport) bool MELoader( me::game::IGame * gameBase, const qxml::Ele
 	if ( ! texturePS )
 	{
 		debug->ReportError( debug::ErrorLevel::Failure, "Element \"textureps\" in \"" + element->GetDocument()->GetPath().ToString() + "\"." ); 
+		return false;
 	}
 	
 	debug->Assert( texturePS != nullptr );
 
 	std::string texturePSName = texturePS->GetAttribute< std::string >( "name" );
 	unify::Path texturePSPath( texturePS->GetAttribute< std::string >( "source" ) );
-	IPixelShader::ptr ps = gameInstance->GetManager< IPixelShader >()->Add( texturePSName, texturePSPath )();
+	auto ps = gameInstance->GetManager< IPixelShader >()->Add( texturePSName, texturePSPath );
+	if (!ps)
+	{
+		return false;
+	}
 	
 	const auto * textureVS = element->FindFirstElement( "texturevs" );
 	if (!texturePS)
@@ -47,12 +52,16 @@ __declspec(dllexport) bool MELoader( me::game::IGame * gameBase, const qxml::Ele
 
 	std::string textureVSName = textureVS->GetAttribute< std::string >( "name" );
 	unify::Path textureVSPath( textureVS->GetAttribute< std::string >( "source" ) );
-	IVertexShader::ptr vs = gameInstance->GetManager< IVertexShader >()->Add( textureVSName, textureVSPath )();
+	auto vs = gameInstance->GetManager< IVertexShader >()->Add( textureVSName, textureVSPath );
+	if (!vs)
+	{
+		return false;
+	}
 
 	// Setup ASE factories.
 	GeometryFactory * factory = new GeometryFactory( gameInstance );
-	factory->SetVertexShader( vs );
-	factory->SetPixelShader( ps );
+	factory->SetVertexShader( *vs );
+	factory->SetPixelShader( *ps );
 
 	gameInstance->GetManager< Geometry >()->AddFactory( "ase", GeometryFactory::ptr( factory ) );
 
