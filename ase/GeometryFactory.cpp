@@ -29,7 +29,7 @@ void GeometryFactory::SetPixelShader( IPixelShader::ptr pixelShader )
 	m_pixelShader = pixelShader;
 }
 
-Geometry::ptr GeometryFactory::Produce( unify::Path source, unify::Parameters parameters )
+unify::Result<Geometry::ptr> GeometryFactory::Produce( unify::Path source, unify::Parameters parameters )
 {
 	game::Game & gameInstance = *m_game;
 
@@ -85,8 +85,12 @@ Geometry::ptr GeometryFactory::Produce( unify::Path source, unify::Parameters pa
 				{
 					qxml::Element * bitmapElement = mapDiffuseElement->GetElement( "BITMAP" );
 					unify::Path texturePath( source.DirectoryOnly(), unify::Path( bitmapElement->GetText() ) );
-					ITexture::ptr texture = textureManager->Add( bitmapElement->GetText(), texturePath )();
-					effect->SetTexture( 0, texture );
+					auto texture = textureManager->Add( bitmapElement->GetText(), texturePath );
+					if (!texture)
+					{
+						return unify::Failure{"Failed to load bitmap."};
+					}
+					effect->SetTexture( 0, *texture );
 				}
 			}
 		}
@@ -98,7 +102,7 @@ Geometry::ptr GeometryFactory::Produce( unify::Path source, unify::Parameters pa
 			assert( materialRef ); // TODO: Presumably this could be null, which likely means the default material - this is not support yet.
 
 			unsigned int effectIndex = 0;
-			effectIndex = *unify::Tostring< unsigned int >( materialRef->GetText() );
+			effectIndex = *unify::FromString< unsigned int >( materialRef->GetText() );
 			Effect::ptr effect = materialList[effectIndex];
 
 			for( auto child : node.Children() )
@@ -195,8 +199,9 @@ Geometry::ptr GeometryFactory::Produce( unify::Path source, unify::Parameters pa
 						positions[ index ].z = mesh_vertex.GetAttribute< float >( "z" );
 					}
 
-					qxml::Element * mesh_tvertexList = mesh.GetElement( "MESH_TVERTLIST" );					
-					std::vector< unify::TexCoords > texCoords( unify::Cast< size_t >( mesh.GetElement( "MESH_NUMTVERTEX" )->GetText() ) );
+					qxml::Element * mesh_tvertexList = mesh.GetElement( "MESH_TVERTLIST" );	
+					auto num_vertices = unify::FromString< uint32_t >(mesh.GetElement("MESH_NUMTVERTEX")->GetText());
+					std::vector< unify::TexCoords > texCoords(*num_vertices);
 					for( auto mesh_tvert : mesh_tvertexList->Children( "MESH_TVERT" ) )
 					{
 						int index = mesh_tvert.GetAttribute< int >( "index" );
@@ -252,7 +257,7 @@ Geometry::ptr GeometryFactory::Produce( unify::Path source, unify::Parameters pa
 	return Geometry::ptr( mesh );
 }
 
-Geometry::ptr GeometryFactory::Produce( unify::Parameters parameters )
+unify::Result<Geometry::ptr> GeometryFactory::Produce( unify::Parameters parameters )
 {
-	throw me::exception::FailedToCreate( "Attempted to create geometry from parameters." );
+	return unify::Failure{ "Attempted to create geometry from parameters." };
 }

@@ -18,8 +18,8 @@ namespace ase
 		void SetVertexShader( me::render::IVertexShader::ptr vertexShader );
 		void SetPixelShader( me::render::IPixelShader::ptr pixelShader );
 
-		me::render::Geometry::ptr Produce( unify::Path source, unify::Parameters parameters ) override;
-		me::render::Geometry::ptr Produce( unify::Parameters parameters ) override;
+		unify::Result<me::render::Geometry::ptr> Produce( unify::Path source, unify::Parameters parameters ) override;
+		unify::Result<me::render::Geometry::ptr> Produce( unify::Parameters parameters ) override;
 
 	private:
 	me::game::Game *m_game;
