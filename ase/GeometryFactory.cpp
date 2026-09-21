@@ -28,7 +28,7 @@ void GeometryFactory::SetPixelShader( IPixelShader::ptr pixelShader )
 	m_pixelShader = pixelShader;
 }
 
-Geometry::ptr GeometryFactory::Produce( unify::Path source, unify::Parameters parameters )
+unify::Result<Geometry::ptr> GeometryFactory::Produce( unify::Path source, unify::Parameters parameters )
 {
 	game::Game & gameInstance = *m_game;
 
@@ -96,9 +96,12 @@ Geometry::ptr GeometryFactory::Produce( unify::Path source, unify::Parameters pa
 			qxml::Element * materialRef = node.GetElement( "MATERIAL_REF" );
 			assert( materialRef ); // TODO: Presumably this could be null, which likely means the default material - this is not support yet.
 
-			unsigned int effectIndex = 0;
-			effectIndex = unify::Cast< unsigned int >( materialRef->GetText() );
-			Effect::ptr effect = materialList[effectIndex];
+			auto effectIndex = unify::FromString<uint32_t>( materialRef->GetText() );
+			if (!effectIndex)
+			{
+				return "Invalid effect index \"" + materialRef->GetText();
+			}
+			Effect::ptr effect = materialList[*effectIndex];
 
 			for( auto child : node.Children() )
 			{
@@ -121,12 +124,25 @@ Geometry::ptr GeometryFactory::Produce( unify::Path source, unify::Parameters pa
 					VertexElement specularE = CommonVertexElement::Specular( stream );
 					VertexElement texE = CommonVertexElement::TexCoords( stream );
 					
-					unsigned int mesh_numfaces = unify::Cast< unsigned int >( mesh.GetElement( "MESH_NUMFACES" )->GetText() );
-					unsigned int uNumPVertices; // Positional "MESH_VERTEX"
-					unsigned int uNumTVertices; // Texture "MESH_TVERT"
+					auto mesh_numfaces = unify::FromString< unsigned int >( mesh.GetElement( "MESH_NUMFACES" )->GetText() );
+					if (!mesh_numfaces)
+					{
+						return unify::Failure{"Invalid MESH_NUMFACES value \"" + mesh.GetElement( "MESH_NUMFACES" )->GetText() + "\"!"};
+					}
 
-					uNumPVertices = unify::Cast< unsigned int >( mesh.GetElement( "MESH_NUMVERTEX" )->GetText() );
-					uNumTVertices = unify::Cast< unsigned int >( mesh.GetElement( "MESH_NUMTVERTEX" )->GetText() );
+					// Positional "MESH_VERTEX"
+					auto mesh_numvertex = unify::FromString< unsigned int >( mesh.GetElement( "MESH_NUMVERTEX" )->GetText() );
+					if (!mesh_numvertex)
+					{
+						return unify::Failure{"Invalid uNumPVertices value \"" +  mesh.GetElement( "MESH_NUMVERTEX" )->GetText() + "\"!"};
+					}
+
+					// Texture "MESH_TVERT"
+					auto mesh_numtvertex = unify::FromString< unsigned int >( mesh.GetElement( "MESH_NUMTVERTEX" )->GetText() );
+					if (!mesh_numtvertex)
+					{
+						return unify::Failure{"Invalid MESH_NUMFACES value \"" + mesh.GetElement( "MESH_NUMTVERTEX" )->GetText() + "\"!"};
+					}
 
 					struct Face
 					{	
@@ -137,7 +153,7 @@ Geometry::ptr GeometryFactory::Produce( unify::Path source, unify::Parameters pa
 						int normal_A, normal_B, normal_C;
 					};
 					
-					std::vector< Face > faces( mesh_numfaces );
+					std::vector< Face > faces( *mesh_numfaces );
 
 					const qxml::Element * mesh_face_list = mesh.GetElement( "MESH_FACE_LIST" );
 					for( auto mesh_face : mesh_face_list->Children( "MESH_FACE" ) )
@@ -174,15 +190,15 @@ Geometry::ptr GeometryFactory::Produce( unify::Path source, unify::Parameters pa
 					};
 
 					// Load position and texture indices...
-					std::vector< PositionTexturePairing > listPTP( mesh_numfaces * 3 );
-					for( u = 0; u < mesh_numfaces; u++ )
+					std::vector< PositionTexturePairing > listPTP( *mesh_numfaces * 3 );
+					for( u = 0; u < *mesh_numfaces; u++ )
 					{
 						listPTP.push_back( { faces[u].mesh_face_B, faces[u].mesh_tface_B } );
 						listPTP.push_back( { faces[u].mesh_face_C, faces[u].mesh_tface_C } );
 					}
 	
 					// Create the vertex buffer for position and normals...
-					std::vector< unify::V3< float > > positions( uNumPVertices );
+					std::vector< unify::V3< float > > positions( *mesh_numvertex );
 
 					// Grab positional and normal information...
 					qxml::Element * mesh_vertex_list = mesh.GetElement( "MESH_VERTEX_LIST" );
@@ -195,7 +211,7 @@ Geometry::ptr GeometryFactory::Produce( unify::Path source, unify::Parameters pa
 					}
 
 					qxml::Element * mesh_tvertexList = mesh.GetElement( "MESH_TVERTLIST" );					
-					std::vector< unify::TexCoords > texCoords( unify::Cast< size_t >( mesh.GetElement( "MESH_NUMTVERTEX" )->GetText() ) );
+					std::vector< unify::TexCoords > texCoords( *mesh_numtvertex );
 					for( auto mesh_tvert : mesh_tvertexList->Children( "MESH_TVERT" ) )
 					{
 						int index = mesh_tvert.GetAttribute< int >( "index" );
@@ -205,7 +221,7 @@ Geometry::ptr GeometryFactory::Produce( unify::Path source, unify::Parameters pa
 
 					std::shared_ptr< unsigned char > vertices( new unsigned char[vd->GetSizeInBytes( 0 ) * listPTP.size()] );
 
-					unify::DataLock lock( vertices.get(), (unsigned int)vd->GetSizeInBytes( 0 ), (unsigned int)listPTP.size(), unify::DataLockAccess::ReadWrite, 0 );
+					util::DataLock lock( vertices.get(), (unsigned int)vd->GetSizeInBytes( 0 ), (unsigned int)listPTP.size(), util::DataLockAccess::ReadWrite, 0 );
 
 					std::vector< Index32 > indices( (unsigned int)listPTP.size() * 3 );
 
@@ -241,7 +257,7 @@ Geometry::ptr GeometryFactory::Produce( unify::Path source, unify::Parameters pa
 					set.SetEffect( effect );
 					set.AddVertexBuffer( { vd, { { listPTP.size(), vertices.get() } }, BufferUsage::Default, bbox } );
 					set.AddIndexBuffer( { { { listPTP.size() * 3, &indices[0] } }, BufferUsage::Default } );
-					set.AddMethod( RenderMethod::CreateTriangleListIndexed( mesh_numfaces * 3, (unsigned int)listPTP.size() * 3, 0, 0 ) );
+					set.AddMethod( RenderMethod::CreateTriangleListIndexed( *mesh_numfaces * 3, (unsigned int)listPTP.size() * 3, 0, 0 ) );
 				}
 			}
 		}
@@ -251,7 +267,7 @@ Geometry::ptr GeometryFactory::Produce( unify::Path source, unify::Parameters pa
 	return Geometry::ptr( mesh );
 }
 
-Geometry::ptr GeometryFactory::Produce( unify::Parameters parameters )
+unify::Result<Geometry::ptr> GeometryFactory::Produce( unify::Parameters parameters )
 {
-	throw me::exception::FailedToCreate( "Attempted to create geometry from parameters." );
+	return unify::Failure { "Attempted to create geometry from parameters." };
 }
