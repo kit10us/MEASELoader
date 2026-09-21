@@ -7,7 +7,8 @@
 #include <me/render/VertexUtil.h>
 #include <unify/String.h>
 #include <unify/FrameSet.h>
-#include <unify/ColorUnit.h>
+#include <unify/Colors.h>
+#include <unify/Cast.h>
 
 using namespace ase;
 using namespace me;
@@ -84,8 +85,12 @@ unify::Result<Geometry::ptr> GeometryFactory::Produce( unify::Path source, unify
 				{
 					qxml::Element * bitmapElement = mapDiffuseElement->GetElement( "BITMAP" );
 					unify::Path texturePath( source.DirectoryOnly(), unify::Path( bitmapElement->GetText() ) );
-					ITexture::ptr texture = textureManager->Add( bitmapElement->GetText(), texturePath )();
-					effect->SetTexture( 0, texture );
+					auto texture = textureManager->Add( bitmapElement->GetText(), texturePath );
+					if (!texture)
+					{
+						return unify::Failure{"Failed to load bitmap."};
+					}
+					effect->SetTexture( 0, *texture );
 				}
 			}
 		}
@@ -212,6 +217,7 @@ unify::Result<Geometry::ptr> GeometryFactory::Produce( unify::Path source, unify
 
 					qxml::Element * mesh_tvertexList = mesh.GetElement( "MESH_TVERTLIST" );					
 					std::vector< unify::TexCoords > texCoords( *mesh_numtvertex );
+
 					for( auto mesh_tvert : mesh_tvertexList->Children( "MESH_TVERT" ) )
 					{
 						int index = mesh_tvert.GetAttribute< int >( "index" );
