@@ -17,7 +17,7 @@ unify::Result<> Document::Load( unify::Path filePath )
 
 	if( ! filePath.Exists() )
 	{
-		return unify::Failure(filePath.ToString() + ": XML File not found!" );
+		return unify::Failure("XML File not found! (" + filePath.ToString() + ")");
 	}
 
 	unify::FileStream stream;

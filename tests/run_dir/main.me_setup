@@ -1,0 +1,29 @@
+<xml>
+
+<title>?RENDERER? Test (?TARGET?)</title>
+
+<define name="EXTENSIONS">../../../extensions/?PLATFORM?/?TARGET?</define>
+
+<renderer source="?EXTENSIONS?/MERenderer?RENDERER?.dll">
+	<display fullscreen="false" x="10" y="10" width="800" height="600"/>
+</renderer>
+
+<assets>common/</assets>
+
+<failuresAsCritical>true</failuresAsCritical>
+
+<logfile>log_?TARGET?.log</logfile>
+
+<assets>?RENDERER?</assets>
+<assets>?RENDERER?/shaders/</assets>
+<assets>?RENDERER?/resources/</assets>
+<assets>common/effects/</assets>
+<assets>common/images/</assets>
+<assets>common/models/</assets>
+<assets>common/scripts/</assets>
+
+<StartScene>Main</StartScene>
+
+<include>?RENDERER?/ext_Ase.me_setup</include>
+
+</xml>

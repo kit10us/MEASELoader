@@ -26,7 +26,13 @@ unify::Result<> MainScene::OnStart()
 	using namespace unify;
 	using namespace object;
 
-	AddResources( unify::Path( "resources/Resources01.me_res" ) );
+	{
+		auto result = AddResources( unify::Path( "resources/Resources01.me_res" ) );
+		if (!result)
+		{
+			return result;
+		}
+	}
 
 	// Add a camera...
 	Object * camera = GetObjectAllocator()->NewObject( "camera" );
