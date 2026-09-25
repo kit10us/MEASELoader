@@ -104,7 +104,7 @@ unify::Result<Geometry::ptr> GeometryFactory::Produce( unify::Path source, unify
 			auto effectIndex = unify::FromString<uint32_t>( materialRef->GetText() );
 			if (!effectIndex)
 			{
-				return "Invalid effect index \"" + materialRef->GetText();
+				return unify::Failure {"Invalid effect index \"" + materialRef->GetText()};
 			}
 			Effect::ptr effect = materialList[*effectIndex];
 

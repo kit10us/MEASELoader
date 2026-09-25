@@ -21,7 +21,7 @@ MainScene::MainScene( me::game::Game * gameInstance )
 {	
 }
 
-void MainScene::OnStart()
+unify::Result<> MainScene::OnStart()
 {
 	using namespace unify;
 	using namespace object;
@@ -30,7 +30,14 @@ void MainScene::OnStart()
 
 	// Add a camera...
 	Object * camera = GetObjectAllocator()->NewObject( "camera" );
-	camera->AddComponent( component::IObjectComponent::ptr( new component::CameraComponent() ) );
+	{
+		auto result = camera->AddComponent( component::IObjectComponent::ptr( new component::CameraComponent() ) );
+		if (!result)
+		{
+			return result;
+		}
+	}
+
 	auto * cameraComponent = polymorphic_downcast< component::CameraComponent * >( camera->GetComponent( "camera" ).get() );
 	cameraComponent->SetProjection( MatrixPerspectiveFovLH( 3.141592653589f / 4.0f, 800/600, 1, 1000 ) );
 	camera->GetFrame().SetPosition( { 0, 5, -7 } );
@@ -48,11 +55,16 @@ void MainScene::OnStart()
 
 		AddGeometryComponent( object, meshASE, modelMatrix  );
 		object->GetFrame().SetPosition( { 0, 0, 0 } );
-		object->AddComponent( component::IObjectComponent::ptr( new object::component::BBoxRendererComponent( GetOS(), GetAsset< Effect >( "ColorSimple" ) ) ) );
+		auto result = object->AddComponent( component::IObjectComponent::ptr( new object::component::BBoxRendererComponent( GetOS(), GetAsset< Effect >( "ColorSimple" ) ) ) );
+		if (!result)
+		{
+			return result;
+		}
 	}
+	return {};
 }
 
-void MainScene::OnUpdate( const UpdateParams & params )
+unify::Result<> MainScene::OnUpdate( const UpdateParams & params )
 {
 	using namespace object;
 
@@ -61,4 +73,6 @@ void MainScene::OnUpdate( const UpdateParams & params )
 	
 	camera->GetFrame().Orbit( { 0, 0, 0 }, { 1, 0 }, unify::AngleInRadians( params.GetDelta().AsSeconds() ) );
 	camera->GetFrame().LookAt( { 0, 0, 0 }, { 0, 1, 0 } );
+
+	return {};
 }
